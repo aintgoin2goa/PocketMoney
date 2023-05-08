@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import {getColors} from '../../styles/colors';
 import {BASE_FONT} from '../../styles/typography';
-import {doBackup} from '../../lib/backup-service';
 
 const getStyles = (isDarkMode: boolean, animation: Animated.Value) => {
   const colors = getColors(isDarkMode);
@@ -85,7 +84,6 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const backup = async () => {
     closeMenu();
     showSpinner(true);
-    await doBackup();
     showSpinner(false);
   };
 
