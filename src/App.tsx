@@ -48,7 +48,6 @@ const App = () => {
   const childCount = useAppSelector(childCountSelector);
   const initialRouteName: keyof StackList =
     childCount > 0 ? 'Home' : 'Add Child';
-  // console.log({childCount, initialRouteName});
 
   return (
     <SafeAreaView style={styles.background}>

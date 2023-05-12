@@ -1,7 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {AppState} from '../store';
 import {State} from '../types';
-import {getActiveChildId} from '../global/selectors';
+import {getActiveChildId} from '../settings/selectors';
 
 export const getChildren = (state: State) => {
   // console.log('getChildren', state);

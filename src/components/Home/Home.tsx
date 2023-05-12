@@ -72,7 +72,7 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
         setShowPayDialog={setShowPayDialog}
         showPayDialog={showPayDialog}
       />
-      {showBackupSpinner && <BackupSpinner text="Backing up..." />}
+      {showBackupSpinner && <BackupSpinner text="Please Wait..." />}
     </View>
   );
 };

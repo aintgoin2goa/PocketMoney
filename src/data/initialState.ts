@@ -1,8 +1,9 @@
 import {Child, State} from './types';
-import {formatDate, uid} from './utils';
+import {formatDate} from './utils';
+import {generateUUID} from '../utils/uuid';
 
 const initialChild: Child = {
-  id: uid('CHILD'),
+  id: generateUUID('CHILD'),
   name: '',
   payments: [],
   settings: {
@@ -16,10 +17,9 @@ const initialChild: Child = {
 export const initialState: State = {
   payments: [],
   children: [initialChild],
-  global: {
+  settings: {
     currentChild: initialChild.id,
     currentDate: formatDate(new Date()),
     backupKey: '',
   },
-  currentChild: 0,
 };
