@@ -7,6 +7,7 @@ import {restoreBackup} from '../data/reducers/global-reducer';
 import {State} from '../data/types';
 import actions from '../data/actions';
 import {sha256} from 'react-native-sha256';
+import {appleAuth} from '@invertase/react-native-apple-authentication';
 
 const client = new S3Client({
   // The AWS Region where the Amazon Simple Storage Service (Amazon S3) bucket will be created. Replace this with your Region.
@@ -19,8 +20,30 @@ const client = new S3Client({
   }),
 });
 
+const getEmailViaAppleAuth = async (): Promise<string | null> => {
+  const appleAuthRequestResponse = await appleAuth.performRequest({
+    requestedOperation: appleAuth.Operation.LOGIN,
+    // Note: it appears putting FULL_NAME first is important, see issue #293
+    requestedScopes: [appleAuth.Scope.FULL_NAME, appleAuth.Scope.EMAIL],
+  });
+  const credentialState = await appleAuth.getCredentialStateForUser(
+    appleAuthRequestResponse.user,
+  );
+
+  // use credentialState response to ensure the user is authenticated
+  if (credentialState !== appleAuth.State.AUTHORIZED) {
+    return null;
+  }
+
+  return appleAuthRequestResponse.email;
+};
+
 const generateBackupKey = async (): Promise<string> => {
-  const email = 'paul.wilson66@gmail.com';
+  // const email = 'paul.wilson66@gmail.com';
+  const email = await getEmailViaAppleAuth();
+  if (!email) {
+    throw new Error('Failed to get email');
+  }
   const key = sha256(email);
   return key;
 };
