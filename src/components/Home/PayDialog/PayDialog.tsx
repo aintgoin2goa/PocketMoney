@@ -8,9 +8,10 @@ import {
 } from '../../../data/children/childSelectors';
 import {amountOwedSelector} from '../../../data/payments/paymentSelectors';
 import actions from '../../../data/actions';
-import {formatDate, uid} from '../../../data/utils';
+import {formatDate} from '../../../data/utils';
 import {Payment} from '../../../data/types';
 import {ActionSheet} from '../../shared/ActionSheet';
+import {generateUUID} from '../../../utils/uuid';
 
 export type PayDialogProps = {
   showPayDialog: boolean;
@@ -29,7 +30,7 @@ export const PayDialog: React.FC<PayDialogProps> = ({
   const dispatch = useAppDispatch();
   const onDone = () => {
     const payload: Payment = {
-      id: uid('PAYMENT'),
+      id: generateUUID('PAYMENT'),
       date: formatDate(new Date()),
       owed,
       paid: amount,

@@ -12,7 +12,6 @@ export const AddChild: React.FC<AddChildProps> = ({navigation}) => {
   const dispatch = useAppDispatch();
 
   const onSave = async (childToSave: Child) => {
-    console.log('SAVE', childToSave);
     dispatch(actions.addChild(childToSave));
     navigation.navigate('Home');
   };

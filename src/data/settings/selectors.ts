@@ -1,9 +1,9 @@
 import {State} from '../types';
 
 export const getActiveChildId = (state: State) => {
-  return state?.global?.currentChild ?? '';
+  return state?.settings?.currentChild ?? '';
 };
 
 export const getBackupKey = (state: State) => {
-  return state?.global?.backupKey ?? '';
+  return state?.settings?.backupKey ?? '';
 };

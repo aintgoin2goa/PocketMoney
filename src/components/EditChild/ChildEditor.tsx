@@ -7,8 +7,6 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import {childCountSelector} from '../../data/children/childSelectors';
-import {useAppSelector} from '../../data/store';
 import {Child, CurrencySymbol} from '../../data/types';
 import {BASE_FONT} from '../../styles/typography';
 import {getColors} from '../../styles/colors';
@@ -18,6 +16,7 @@ import {Picker} from '@react-native-picker/picker';
 import {ActionSheet} from '../shared/ActionSheet';
 import {format} from 'date-fns';
 import DatePicker from 'react-native-date-picker';
+import {generateUUID} from '../../utils/uuid';
 
 const getStyles = (isDarkMode: boolean) => {
   const colors = getColors(isDarkMode);
@@ -117,9 +116,16 @@ const dayAsText = (value: number): string =>
 export type ChildEditorProps = {
   child?: Child;
   onSave: (child: Child) => void;
+  secondaryButtonText?: string;
+  onSecondaryButtonClick?: () => void;
 };
 
-export const ChildEditor: React.FC<ChildEditorProps> = ({child, onSave}) => {
+export const ChildEditor: React.FC<ChildEditorProps> = ({
+  child,
+  onSave,
+  secondaryButtonText,
+  onSecondaryButtonClick,
+}) => {
   const styles = getStyles(useColorScheme() === 'dark');
   const [name, setName] = useState(child?.name ?? '');
   const pocketMoneyAmounts = splitCurrencyAmount(
@@ -143,13 +149,12 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({child, onSave}) => {
     child?.settings?.currency.major ?? CURRENCY_POUNDS.major,
   );
   const [pickerCurrency, setPickerCurrency] = useState(currency);
-  const newId = useAppSelector(childCountSelector);
 
   const onSaveClick = () => {
     const currencyToSave = currencyMap.get(currency) ?? CURRENCY_POUNDS;
     const pocketMoneyPerWeek = pounds * 100 + pence;
     const childToSave: Child = {
-      id: child?.id ?? newId,
+      id: child?.id ?? generateUUID('CHILD'),
       name,
       payments: child?.payments ?? [],
       settings: {
@@ -166,6 +171,13 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({child, onSave}) => {
 
   return (
     <View style={styles.container}>
+      {secondaryButtonText && onSecondaryButtonClick && (
+        <Button
+          title={secondaryButtonText}
+          onPress={() => onSecondaryButtonClick()}
+        />
+      )}
+
       <View style={styles.field}>
         <Text style={styles.labelText}>Name</Text>
         <TextInput
@@ -248,7 +260,6 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({child, onSave}) => {
           }}
         />
       </View>
-
       <PrimaryActionButton onPress={onSaveClick} text="Save" />
     </View>
   );

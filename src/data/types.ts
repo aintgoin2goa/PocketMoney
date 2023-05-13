@@ -16,7 +16,7 @@ export type CurrencySymbol = {
   minor: string;
 };
 
-export type Settings = {
+export type ChildSettings = {
   currency: CurrencySymbol;
   pocketMoneyPerWeek: number;
   payDay: DayOfWeek;
@@ -26,19 +26,18 @@ export type Settings = {
 export type Child = {
   id: string;
   name: string;
-  settings: Settings;
+  settings: ChildSettings;
   payments: Payment[];
 };
 
-export type Global = {
+export type Settings = {
   currentChild: string;
   currentDate: DateString;
   backupKey: string;
 };
 
 export type State = {
-  currentChild: number;
   children: Child[];
   payments: Payment[];
-  global: Global;
+  settings: Settings;
 };

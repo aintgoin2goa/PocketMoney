@@ -4,13 +4,16 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "react-native run-ios --udid 4D2DC79E-033E-49AB-B867-C267E80385FF",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.327.0",
+    "@aws-sdk/client-cognito-identity": "^3.329.0",
+    "@aws-sdk/client-s3": "^3.298.0",
+    "@aws-sdk/credential-provider-cognito-identity": "^3.329.0",
+    "@aws-sdk/credential-providers": "^3.329.0",
     "@miblanchard/react-native-slider": "^2.3.1",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-picker/picker": "^2.4.10",

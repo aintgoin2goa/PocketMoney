@@ -1,6 +1,5 @@
 import {differenceInDays, format, parse} from 'date-fns';
 import {CurrencySymbol, DateString} from './types';
-import uuid from 'react-native-uuid';
 
 export const splitCurrencyAmount = (amount?: number): [number, number] => {
   if (!amount) {
@@ -60,5 +59,3 @@ export const formatDistance = (date1: Date, date2: Date): string => {
     return `in ${days} days`;
   }
 };
-
-export const uid = (prefix: 'PAYMENT' | 'CHILD') => `${prefix}-${uuid.v4()}`;
