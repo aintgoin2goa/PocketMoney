@@ -2,8 +2,11 @@ import 'react-native-get-random-values';
 import 'react-native-url-polyfill/auto';
 import {S3Client, PutObjectCommand, GetObjectCommand} from '@aws-sdk/client-s3';
 import {fromCognitoIdentityPool} from '@aws-sdk/credential-providers';
-import {AppState, store} from '../data/store';
+import {store} from '../data/store';
 import {restoreBackup} from '../data/reducers/global-reducer';
+import {State} from '../data/types';
+import actions from '../data/actions';
+import {sha256} from 'react-native-sha256';
 
 const client = new S3Client({
   // The AWS Region where the Amazon Simple Storage Service (Amazon S3) bucket will be created. Replace this with your Region.
@@ -16,14 +19,23 @@ const client = new S3Client({
   }),
 });
 
+const generateBackupKey = async (): Promise<string> => {
+  const email = 'paul.wilson66@gmail.com';
+  const key = sha256(email);
+  return key;
+};
+
 export const backup = async () => {
   try {
-    const data = store.getState() as AppState;
-    console.log('DATA', data);
-    const Body = JSON.stringify(data);
+    const state = store.getState() as State;
+    if (!state.settings.backupKey) {
+      const key = await generateBackupKey();
+      store.dispatch(actions.setBackupKey({key}));
+    }
+    const Body = JSON.stringify(state);
     const command = new PutObjectCommand({
       Bucket: 'pocket-money',
-      Key: 'test/backup.json',
+      Key: `${state.settings.backupKey}/backup.json`,
       Body,
     });
     const response = await client.send(command);
@@ -35,9 +47,11 @@ export const backup = async () => {
 
 export const restore = async () => {
   try {
+    const state = store.getState() as State;
+    const backupKey = state.settings.backupKey || (await generateBackupKey());
     const command = new GetObjectCommand({
       Bucket: 'pocket-money',
-      Key: 'test/backup.json',
+      Key: `${backupKey}/backup.json`,
     });
     const response = await client.send(command);
     console.log({response});
