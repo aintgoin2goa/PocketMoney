@@ -40,7 +40,7 @@ export const Dates: React.FC = () => {
   const styles = getStyles(useColorScheme() === 'dark');
   const nextDueDate = useAppSelector(nextPaymentSelector);
   const lastPaid = useAppSelector(lastPaymentSelector);
-  // console.info('Dates', {nextDueDate, lastPaid, now: new Date()});
+  console.info('Dates', {nextDueDate, lastPaid, now: new Date()});
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>

@@ -5,7 +5,6 @@ import {formatDate} from '../utils';
 
 const switchChild = (state: Settings, action: PayloadAction<{id: string}>) => {
   state.currentChild = action.payload.id;
-  console.log('SWITCH CHILD', action, state);
   return state;
 };
 
@@ -22,8 +21,13 @@ const setBackupKey = (
   return state;
 };
 
+const setOfflineMode = (state: Settings, action: PayloadAction<boolean>) => {
+  state.offlineMode = action.payload;
+  return state;
+};
+
 export const settingsSlice = createSlice({
-  name: 'global',
+  name: 'settings',
   initialState: initialState.settings,
-  reducers: {switchChild, updateCurrentDate, setBackupKey},
+  reducers: {switchChild, updateCurrentDate, setBackupKey, setOfflineMode},
 });

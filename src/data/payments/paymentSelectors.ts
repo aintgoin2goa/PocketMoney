@@ -6,10 +6,9 @@ import {getActiveChild, getSettings} from '../children/childSelectors';
 
 export const getPayments = (state: State): Payment[] => {
   const child = getActiveChild(state);
-  // console.log('getPayments', state);
   const payments = state.payments.filter(p => p.childId === child.id);
   if (payments.length) {
-    return payments;
+    return payments.reverse();
   }
 
   if (child.payments && child.payments.length) {
