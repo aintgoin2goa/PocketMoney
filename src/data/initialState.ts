@@ -21,5 +21,6 @@ export const initialState: State = {
     currentChild: initialChild.id,
     currentDate: formatDate(new Date()),
     backupKey: '',
+    offlineMode: false,
   },
 };

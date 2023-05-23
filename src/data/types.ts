@@ -34,6 +34,7 @@ export type Settings = {
   currentChild: string;
   currentDate: DateString;
   backupKey: string;
+  offlineMode: boolean;
 };
 
 export type State = {
