@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="7" failures="0" errors="0" time="21.308">
+  <testsuite name="lib/backup" errors="0" failures="0" skipped="0" timestamp="2023-06-09T12:28:38" time="20.861" tests="7">
+    <testcase classname="lib/backup can generate a backup key" name="lib/backup can generate a backup key" time="0.004">
+    </testcase>
+    <testcase classname="lib/backup backup should save backups on s3" name="lib/backup backup should save backups on s3" time="0.082">
+    </testcase>
+    <testcase classname="lib/backup backup No backup key should not save to s3" name="lib/backup backup No backup key should not save to s3" time="0.001">
+    </testcase>
+    <testcase classname="lib/backup restore no backup key should not download the backup" name="lib/backup restore no backup key should not download the backup" time="0.001">
+    </testcase>
+    <testcase classname="lib/backup restore no backup key should not alter the state" name="lib/backup restore no backup key should not alter the state" time="0">
+    </testcase>
+    <testcase classname="lib/backup restore with backup key should download backup from S3" name="lib/backup restore with backup key should download backup from S3" time="0.001">
+    </testcase>
+    <testcase classname="lib/backup restore with backup key should restore the state" name="lib/backup restore with backup key should restore the state" time="0.001">
+    </testcase>
+  </testsuite>
+</testsuites>
