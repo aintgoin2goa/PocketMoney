@@ -52,19 +52,16 @@ export const lastPaymentSelector = createSelector(getLastPayment, payment => {
     return 'No payments found';
   }
   const date = parseDate(payment.date);
-  const now = new Date();
-  return `${format(date, 'do LLLL')} (${formatDistance(date, now)})`;
+  return `${format(date, 'do LLLL')} (${formatDistance(date)})`;
 });
 
 export const nextPaymentSelector = createSelector(
   getSettings,
   settings => {
     const nextPaymentDate = nextDay(new Date(), settings.payDay);
-    const now = new Date();
     // console.log('nextPaymentSelector', {nextPaymentDate, now});
     return `${format(nextPaymentDate, 'EEEE do LLLL')} (${formatDistance(
       nextPaymentDate,
-      now,
     )})`;
   },
   {
