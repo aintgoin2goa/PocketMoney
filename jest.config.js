@@ -2,4 +2,5 @@
 module.exports = {
   preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'node',
+  reporters: ['default', 'jest-junit'],
 };
