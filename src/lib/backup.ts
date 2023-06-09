@@ -19,7 +19,7 @@ const client = new S3Client({
 });
 
 export const generateBackupKey = async (email: string): Promise<string> => {
-  const key = sha256(email);
+  const key = await sha256(email);
   return key;
 };
 
@@ -54,17 +54,15 @@ export const restore = async () => {
       Bucket: 'pocket-money',
       Key: `${backupKey}/backup.json`,
     });
-    console.log('command', {command});
     const response = await client.send(command);
-    console.dir(response);
     if (response.Body) {
       const body = await response.Body.transformToString();
       if (!body) {
         return;
       }
       const data = JSON.parse(body);
-      console.log(data);
-      store.dispatch(restoreBackup(data));
+      const action = restoreBackup(data);
+      store.dispatch(action);
     }
   } catch (error) {
     console.error({error});
