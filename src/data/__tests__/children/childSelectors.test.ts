@@ -8,9 +8,9 @@ import {
   getSettings,
   inactiveChildrenSelector,
   settingsSelector,
-} from '../children/childSelectors';
-import {initialState} from '../initialState';
-import {Child, ChildSettings, State} from '../types';
+} from '../../children/childSelectors';
+import {initialState} from '../../initialState';
+import {Child, ChildSettings, State} from '../../types';
 
 const STERLING = {major: '£', minor: 'p'};
 
