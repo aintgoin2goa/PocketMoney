@@ -1,29 +1,5 @@
 import {childSlice} from '../../children/childReducer';
-import {STERLING} from '../../currencies';
-import {Child} from '../../types';
-
-const makeChild = (id: string): Child => {
-  return {
-    id,
-    name: id,
-    settings: {
-      payDay: 6,
-      pocketMoneyPerWeek: 1,
-      currency: STERLING,
-      beginningOfTime: '',
-    },
-    payments: [],
-  };
-};
-
-const makeChildren = (count: number): Child[] => {
-  const children: Child[] = [];
-  for (let i = 0; i < count; i++) {
-    children.push(makeChild(`CHILD-${i})`));
-  }
-
-  return children;
-};
+import {makeChild, makeChildren} from '../utils';
 
 describe('childReducer', () => {
   describe('editChild', () => {

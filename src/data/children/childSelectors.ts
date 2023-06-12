@@ -17,7 +17,7 @@ export const getActiveChild = (state: State) => {
   return child ? child : state.children[0];
 };
 
-export const getSettings = (state: AppState) => getActiveChild(state)?.settings;
+export const getSettings = (state: AppState) => getActiveChild(state).settings;
 
 export const activeChildSelector = createSelector(
   getActiveChild,
