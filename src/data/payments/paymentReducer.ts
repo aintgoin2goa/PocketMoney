@@ -9,7 +9,10 @@ const isValidPayment = (payment: unknown): payment is Payment => {
 
   const possiblePayment = payment as Payment;
 
-  if (typeof possiblePayment.childId !== 'string') {
+  if (
+    typeof possiblePayment.childId !== 'string' ||
+    !possiblePayment.childId.length
+  ) {
     return false;
   }
 
@@ -22,7 +25,7 @@ const makePayment = (
 ) => {
   const {payload} = action;
   if (!isValidPayment(payload)) {
-    console.log('makePaymentHandler', 'INVALID_PAYMENT', payload);
+    // console.log('makePaymentHandler', 'INVALID_PAYMENT', payload);
     return payments;
   }
 
@@ -35,7 +38,6 @@ const deletePayment = (
   payments: Payment[],
   action: {type: string; payload: {id: string}},
 ) => {
-  console.log(action);
   const index = payments.findIndex(p => p.id === action.payload.id);
   if (index < 0) {
     console.error(`Payment not found!  id: ${action.payload.id}`);

@@ -28,7 +28,6 @@ export const amountOwedSelector = createSelector(
   getSettings,
   (payment, settings) => {
     let date = parseDate(payment?.date ?? settings.beginningOfTime);
-    console.log('date', date);
     const remaining = payment?.remaining ?? 0;
     const now = new Date();
     let payDays = 0;
