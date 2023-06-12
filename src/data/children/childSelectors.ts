@@ -4,7 +4,6 @@ import {State} from '../types';
 import {getActiveChildId} from '../settings/selectors';
 
 export const getChildren = (state: State) => {
-  // console.log('getChildren', state);
   return state.children;
 };
 
@@ -18,11 +17,11 @@ export const getActiveChild = (state: State) => {
   return child ? child : state.children[0];
 };
 
-export const getSettings = (state: AppState) => getActiveChild(state)?.settings;
+export const getSettings = (state: AppState) => getActiveChild(state).settings;
 
 export const activeChildSelector = createSelector(
   getActiveChild,
-  child => child?.name ?? '',
+  child => child.name,
 );
 
 export const activeChildDetailsSelector = createSelector(

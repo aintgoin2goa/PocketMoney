@@ -9,6 +9,9 @@ import {restoreBackup} from '../../data/reducers/global-reducer';
 const getStateMock = store.getState as jest.Mock<State>;
 const dispatchMock = store.dispatch as jest.Mock;
 
+jest.spyOn(console, 'error').mockImplementation();
+jest.spyOn(console, 'log').mockImplementation();
+
 jest.mock('react-native-sha256', () => ({
   sha256: jest.fn().mockResolvedValue('sha256'),
 }));

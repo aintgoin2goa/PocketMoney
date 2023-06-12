@@ -27,16 +27,10 @@ export const amountOwedSelector = createSelector(
   getLastPayment,
   getSettings,
   (payment, settings) => {
-    if (!settings) {
-      return 0;
-    }
-    let date = parseDate(
-      payment && payment.date ? payment.date : settings.beginningOfTime,
-    );
+    let date = parseDate(payment?.date ?? settings.beginningOfTime);
     const remaining = payment?.remaining ?? 0;
     const now = new Date();
     let payDays = 0;
-    // console.log('amountOwedSelector', {payment, settings, date, remaining});
     date = nextDay(date, settings.payDay);
     while (now > date) {
       payDays++;
@@ -52,19 +46,15 @@ export const lastPaymentSelector = createSelector(getLastPayment, payment => {
     return 'No payments found';
   }
   const date = parseDate(payment.date);
-  const now = new Date();
-  return `${format(date, 'do LLLL')} (${formatDistance(date, now)})`;
+  return `${format(date, 'do LLLL')} (${formatDistance(date)})`;
 });
 
 export const nextPaymentSelector = createSelector(
   getSettings,
   settings => {
     const nextPaymentDate = nextDay(new Date(), settings.payDay);
-    const now = new Date();
-    // console.log('nextPaymentSelector', {nextPaymentDate, now});
     return `${format(nextPaymentDate, 'EEEE do LLLL')} (${formatDistance(
       nextPaymentDate,
-      now,
     )})`;
   },
   {

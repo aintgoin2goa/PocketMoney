@@ -33,20 +33,24 @@ export const printCurrency = (
 const DATE_FORMAT = 'yyyy-MM-dd';
 
 export const parseDate = (date: DateString): Date => {
-  return parse(date, DATE_FORMAT, new Date());
+  const parsed = parse(date, DATE_FORMAT, new Date());
+  if (Number.isNaN(parsed.getTime())) {
+    throw new Error(`Invalid date: ${date}`);
+  }
+
+  return parsed;
 };
 
 export const formatDate = (date: Date): DateString => {
   return format(date, DATE_FORMAT);
 };
 
-export const formatDistance = (date1: Date, date2: Date): string => {
+export const formatDistance = (date1: Date): string => {
   const date1C = new Date(date1.getTime());
-  const date2C = new Date(date2.getTime());
+  const date2C = new Date();
   date1C.setHours(0, 0, 0, 0);
   date2C.setHours(0, 0, 0, 0);
   const days = differenceInDays(date1C, date2C);
-  // console.log('days', {days, date1C, date2C});
   if (days === 0) {
     return 'today';
   } else if (days === 1) {
