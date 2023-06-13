@@ -11,6 +11,11 @@ import {
 import {getColors} from '../../styles/colors';
 import {BASE_FONT} from '../../styles/typography';
 import {backup as doBackup, restore as doRestore} from '../../lib/backup';
+import {useAppDispatch, useAppSelector} from '../../data/store';
+import {getOfflineMode} from '../../data/settings/selectors';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {StackList} from '../../types';
+import actions from '../../data/actions';
 
 const getStyles = (isDarkMode: boolean, animation: Animated.Value) => {
   const colors = getColors(isDarkMode);
@@ -61,6 +66,7 @@ export type SideMenuProps = {
   show: boolean;
   closeMenu: () => void;
   showSpinner: (show: boolean) => void;
+  navigation: NativeStackNavigationProp<StackList, 'Home', undefined>;
 };
 
 const duration = 500;
@@ -69,10 +75,13 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   show,
   closeMenu,
   showSpinner,
+  navigation,
 }) => {
   const {width: screenWidth} = useWindowDimensions();
+  const isOffline = useAppSelector(getOfflineMode);
   const slideAnim = useRef(new Animated.Value(-screenWidth)).current;
   const styles = getStyles(useColorScheme() === 'dark', slideAnim);
+  const dispatch = useAppDispatch();
 
   const toValue = show ? 0 : -screenWidth;
 
@@ -96,22 +105,43 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     showSpinner(false);
   };
 
+  const online = async () => {
+    closeMenu();
+    dispatch(actions.setOfflineMode(false));
+    navigation.navigate('Start');
+  };
+
   return (
     <Animated.View style={styles.menu}>
-      <View style={styles.row}>
-        <Pressable>
-          <Text style={styles.text} onPress={backup}>
-            Backup
-          </Text>
-        </Pressable>
-      </View>
-      <View style={styles.row}>
-        <Pressable>
-          <Text style={styles.text} onPress={restore}>
-            Restore
-          </Text>
-        </Pressable>
-      </View>
+      {!isOffline && (
+        <View style={styles.row}>
+          <Pressable>
+            <Text style={styles.text} onPress={backup}>
+              Backup
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
+      {!isOffline && (
+        <View style={styles.row}>
+          <Pressable>
+            <Text style={styles.text} onPress={restore}>
+              Restore
+            </Text>
+          </Pressable>
+        </View>
+      )}
+
+      {isOffline && (
+        <View style={styles.row}>
+          <Pressable>
+            <Text style={styles.text} onPress={online}>
+              Go online
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </Animated.View>
   );
 };

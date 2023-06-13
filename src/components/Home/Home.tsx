@@ -53,6 +53,7 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
         show={showMenu}
         closeMenu={() => setShowMenu(false)}
         showSpinner={setShowBackupSpinner}
+        navigation={navigation}
       />
       <View style={styles.contentContainer}>
         <Owed />

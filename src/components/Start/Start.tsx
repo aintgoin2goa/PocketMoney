@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {childCountSelector} from '../../data/children/childSelectors';
-import {getBackupKey} from '../../data/settings/selectors';
+import {getBackupKey, getOfflineMode} from '../../data/settings/selectors';
 import {useAppSelector} from '../../data/store';
 import {restore} from '../../lib/backup';
 import {getColors} from '../../styles/colors';
@@ -74,9 +74,14 @@ export const Start: React.FC<StartProps> = ({navigation}) => {
 
   const backupKey = useAppSelector(getBackupKey);
   const childCount = useAppSelector(childCountSelector);
+  const offlineMode = useAppSelector(getOfflineMode);
   const [text, setText] = useState('');
 
   useEffect(() => {
+    if (offlineMode) {
+      navigation.navigate('Home');
+      return;
+    }
     if (!backupKey) {
       return;
     }
@@ -95,7 +100,7 @@ export const Start: React.FC<StartProps> = ({navigation}) => {
         console.error('restore error', e);
         navigation.navigate('Add Child');
       });
-  }, [backupKey, childCount, navigation]);
+  }, [backupKey, childCount, navigation, offlineMode]);
 
   return (
     <View style={styles.container}>
