@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
 import {MoneyInput} from './MoneyInput';
 import {useAppDispatch, useAppSelector} from '../../../data/store';
 import {
@@ -12,6 +12,7 @@ import {formatDate} from '../../../data/utils';
 import {Payment} from '../../../data/types';
 import {ActionSheet} from '../../shared/ActionSheet';
 import {generateUUID} from '../../../utils/uuid';
+import {getCurrentPayment} from '../../../data/settings/selectors';
 
 export type PayDialogProps = {
   showPayDialog: boolean;
@@ -26,8 +27,13 @@ export const PayDialog: React.FC<PayDialogProps> = ({
   const owed = useAppSelector(amountOwedSelector);
   const activeChildName = useAppSelector(activeChildSelector);
   const activeChild = useAppSelector(activeChildDetailsSelector);
-  const [amount, setAmount] = useState(owed);
+  const amount = useAppSelector(getCurrentPayment);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(actions.setCurrentPayment(owed));
+  }, [owed, dispatch]);
+
   const onDone = () => {
     const payload: Payment = {
       id: generateUUID('PAYMENT'),
@@ -40,6 +46,7 @@ export const PayDialog: React.FC<PayDialogProps> = ({
     };
     dispatch(actions.makePayment(payload));
   };
+
   return (
     <ActionSheet
       show={showPayDialog}
@@ -48,10 +55,8 @@ export const PayDialog: React.FC<PayDialogProps> = ({
       <MoneyInput
         currency={settings.currency}
         pocketMoneyPerWeek={settings.pocketMoneyPerWeek}
-        amount={amount}
         owed={owed}
         step={settings.pocketMoneyPerWeek / 2}
-        setAmount={setAmount}
       />
     </ActionSheet>
   );

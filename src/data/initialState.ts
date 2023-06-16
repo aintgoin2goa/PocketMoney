@@ -22,5 +22,6 @@ export const initialState: State = {
     currentDate: formatDate(new Date()),
     backupKey: '',
     offlineMode: false,
+    currentPayment: 0,
   },
 };

@@ -43,7 +43,7 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
   const menuIcon = showMenu ? 'close' : 'menu-outline';
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="HomeScreen">
       <TopBar
         navigation={navigation}
         onMenuPress={menuPressed}
@@ -59,12 +59,14 @@ export const Home: React.FC<HomeProps> = ({navigation}) => {
         <Owed />
         <Dates />
         <Button
+          testID="HomeScreen__PaymentHistoryButton"
           title="View Payment History"
           onPress={() => navigation.navigate('Payment History')}
         />
       </View>
       <View style={styles.footer}>
         <PrimaryActionButton
+          testID="HomeScreen__PayButton"
           text="Pay"
           onPress={() => setShowPayDialog(true)}
         />

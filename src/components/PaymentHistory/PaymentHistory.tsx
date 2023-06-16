@@ -70,12 +70,12 @@ type RenderItemArgs = {
   item: ItemProps;
 };
 
-export const Item: React.FC<ItemProps> = ({date, amount, id}) => {
+export const Item: React.FC<ItemProps> = ({date, amount, id, index}) => {
   const styles = getStyles(useColorScheme() === 'dark');
   const dispatch = useAppDispatch();
   const onDelete = () => dispatch(actions.deletePayment({id}));
   return (
-    <Deletable onDelete={onDelete}>
+    <Deletable testID={`PaymentHistory__Item-${index}`} onDelete={onDelete}>
       <View style={styles.item}>
         <Text style={styles.date}>{date}</Text>
         <Text style={styles.amount}>{amount}</Text>

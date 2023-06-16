@@ -74,7 +74,11 @@ export const AddEmail: React.FC<AddEmailProps> = ({display}) => {
           returnKeyType="go"
         />
       </View>
-      <Button title="Offline mode" onPress={onOfflineModeClick} />
+      <Button
+        title="Offline mode"
+        onPress={onOfflineModeClick}
+        testID="StartScreen__OfflineButton"
+      />
       <PrimaryActionButton onPress={onContinueClick} text="Continue" />
     </React.Fragment>
   );
