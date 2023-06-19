@@ -1,10 +1,9 @@
-name: Node.js CI
+name: Build, lint and tests
 
 on:
   push:
     branches: [ main ]
   pull_request:
-    branches: [ main ]
 
 jobs:
   test:
@@ -20,3 +19,9 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
+      - name: Test report
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: junit.xml
