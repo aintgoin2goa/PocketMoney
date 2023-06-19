@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {childCountSelector} from '../../data/children/childSelectors';
-import {getBackupKey} from '../../data/settings/selectors';
+import {getBackupKey, getOfflineMode} from '../../data/settings/selectors';
 import {useAppSelector} from '../../data/store';
 import {restore} from '../../lib/backup';
 import {getColors} from '../../styles/colors';
@@ -20,7 +20,7 @@ import {AddEmail} from './AddEmail';
 
 const getStyles = (
   isDarkMode: boolean,
-  spin: Animated.AnimatedInterpolation,
+  spin: Animated.AnimatedInterpolation<number>,
 ) => {
   const colors = getColors(isDarkMode);
   return StyleSheet.create({
@@ -54,14 +54,14 @@ export type StartProps = NativeStackScreenProps<StackList, 'Start'>;
 
 export const Start: React.FC<StartProps> = ({navigation}) => {
   const spinValue = new Animated.Value(0);
-  Animated.loop(
+  const loop = Animated.loop(
     Animated.timing(spinValue, {
       toValue: 1,
       duration: 3000,
       easing: Easing.linear,
       useNativeDriver: true,
     }),
-  ).start();
+  );
 
   const spin = spinValue.interpolate({
     inputRange: [0, 1],
@@ -74,17 +74,24 @@ export const Start: React.FC<StartProps> = ({navigation}) => {
 
   const backupKey = useAppSelector(getBackupKey);
   const childCount = useAppSelector(childCountSelector);
+  const offlineMode = useAppSelector(getOfflineMode);
   const [text, setText] = useState('');
 
   useEffect(() => {
+    if (offlineMode) {
+      navigation.navigate('Home');
+      return;
+    }
     if (!backupKey) {
       return;
     }
 
+    loop.start();
     setText('Restoring backup');
 
     restore()
       .then(() => {
+        loop.stop();
         if (childCount > 0) {
           navigation.navigate('Home');
         } else {
@@ -95,10 +102,10 @@ export const Start: React.FC<StartProps> = ({navigation}) => {
         console.error('restore error', e);
         navigation.navigate('Add Child');
       });
-  }, [backupKey, childCount, navigation]);
+  }, [backupKey, childCount, navigation, offlineMode, loop]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="StartScreen">
       <AddEmail display={!backupKey} />
       {text && (
         <View style={styles.spinnerContainer}>

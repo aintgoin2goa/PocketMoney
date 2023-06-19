@@ -69,9 +69,12 @@ export const TopBar: React.FC<TopBarProps> = ({
           <Icon name={menuIcon} size={30} style={styles.menuIcon} />
         </Pressable>
         <Pressable
+          testID="HomeScreen__ChildSwitcherButton"
           style={styles.childNameContainer}
           onPress={() => setChildSwitcherVisible(!childSwitcherVisible)}>
-          <Text style={styles.childName}>{name}</Text>
+          <Text testID="HomeScreen__ChildName" style={styles.childName}>
+            {name}
+          </Text>
           <Icon
             style={styles.childMenuIcon}
             name={childSwitcherVisible ? 'caret-up' : 'caret-down'}

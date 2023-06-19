@@ -3,15 +3,16 @@ import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import {CurrencySymbol} from '../../../data/types';
 import {printCurrency} from '../../../data/utils';
 import {getColors} from '../../../styles/colors';
-import {Slider} from '@miblanchard/react-native-slider';
+import Slider from '@react-native-community/slider';
 import {TITLE_FONT} from '../../../styles/typography';
+import {useAppDispatch, useAppSelector} from '../../../data/store';
+import {getCurrentPayment} from '../../../data/settings/selectors';
+import actions from '../../../data/actions';
 
 export type MoneyInputProps = {
   currency: CurrencySymbol;
   pocketMoneyPerWeek: number;
   owed: number;
-  amount: number;
-  setAmount: (amount: number) => void;
   step: number;
 };
 
@@ -55,28 +56,34 @@ const getStyles = (isDarkMode: boolean) => {
 export const MoneyInput: React.FC<MoneyInputProps> = ({
   currency,
   owed,
-  amount,
   step,
-  setAmount,
   pocketMoneyPerWeek,
 }) => {
   const styles = getStyles(useColorScheme() === 'dark');
-  const onChange = value => {
-    setAmount(value);
-  };
   const minimumValue = 0;
   const maximumValue = owed > 0 ? owed * 2 : pocketMoneyPerWeek * 2;
+  const amount = useAppSelector(getCurrentPayment);
+  const dispatch = useAppDispatch();
+
+  const onValueChange = (value: number) => {
+    dispatch(actions.setCurrentPayment(value));
+  };
+
+  console.log('MoneyInput', {amount, owed});
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.amount}>{printCurrency(amount, currency)}</Text>
+    <View testID="MoneyInput" style={styles.container}>
+      <Text testID="MoneyInput__Amount" style={styles.amount}>
+        {printCurrency(amount, currency)}
+      </Text>
       <View style={styles.sliderContainer}>
         <Slider
+          testID="MoneyInput__Slider"
           value={amount}
           maximumValue={maximumValue}
           minimumValue={minimumValue}
           step={step}
-          onValueChange={onChange}
+          onValueChange={onValueChange}
         />
       </View>
     </View>

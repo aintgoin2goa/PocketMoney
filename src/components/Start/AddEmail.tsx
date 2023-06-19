@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, useColorScheme, View} from 'react-native';
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  useColorScheme,
+  View,
+} from 'react-native';
 import actions from '../../data/actions';
 import {useAppDispatch} from '../../data/store';
 import {generateBackupKey} from '../../lib/backup';
@@ -52,6 +59,10 @@ export const AddEmail: React.FC<AddEmailProps> = ({display}) => {
     dispatch(actions.setBackupKey({key: backupKey}));
   };
 
+  const onOfflineModeClick = async () => {
+    dispatch(actions.setOfflineMode(true));
+  };
+
   return (
     <React.Fragment>
       <View style={styles.field}>
@@ -63,6 +74,11 @@ export const AddEmail: React.FC<AddEmailProps> = ({display}) => {
           returnKeyType="go"
         />
       </View>
+      <Button
+        title="Offline mode"
+        onPress={onOfflineModeClick}
+        testID="StartScreen__OfflineButton"
+      />
       <PrimaryActionButton onPress={onContinueClick} text="Continue" />
     </React.Fragment>
   );

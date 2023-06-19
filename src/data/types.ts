@@ -35,6 +35,7 @@ export type Settings = {
   currentDate: DateString;
   backupKey: string;
   offlineMode: boolean;
+  currentPayment: number;
 };
 
 export type State = {

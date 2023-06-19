@@ -3,5 +3,8 @@ module.exports = {
   extends: '@react-native-community',
   globals: {
     jest: true,
+    device: true,
+    element: true,
+    by: true,
   },
 };

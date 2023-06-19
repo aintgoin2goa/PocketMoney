@@ -15,7 +15,7 @@ import {PrimaryActionButton} from '../shared/PrimaryActionButton';
 import {Picker} from '@react-native-picker/picker';
 import {ActionSheet} from '../shared/ActionSheet';
 import {format} from 'date-fns';
-import DatePicker from 'react-native-date-picker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {generateUUID} from '../../utils/uuid';
 
 const getStyles = (isDarkMode: boolean) => {
@@ -149,6 +149,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
     child?.settings?.currency.major ?? CURRENCY_POUNDS.major,
   );
   const [pickerCurrency, setPickerCurrency] = useState(currency);
+  const [pickerDate, setPickerDate] = useState(beginningOfTime);
 
   const onSaveClick = () => {
     const currencyToSave = currencyMap.get(currency) ?? CURRENCY_POUNDS;
@@ -170,7 +171,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} testID="ChildEditor">
       {secondaryButtonText && onSecondaryButtonClick && (
         <Button
           title={secondaryButtonText}
@@ -181,6 +182,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
       <View style={styles.field}>
         <Text style={styles.labelText}>Name</Text>
         <TextInput
+          testID="ChildEditor__NameInput"
           value={name}
           style={styles.input}
           onChangeText={setName}
@@ -191,14 +193,23 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
       <View style={styles.field}>
         <View style={styles.valueContainer}>
           <Text style={styles.labelText}>Pocket money day:</Text>
-          <Text style={styles.value}>{dayAsText(day)}</Text>
-          <Button title="Change" onPress={() => setShowDayPicker(true)} />
+          <Text testID="ChildEditor__PayDay" style={styles.value}>
+            {dayAsText(day)}
+          </Text>
+          <Button
+            testID="ChildEditor__ChangeDay"
+            title="Change"
+            onPress={() => setShowDayPicker(true)}
+          />
         </View>
         <ActionSheet
           show={showDayPicker}
           setShow={setShowDayPicker}
           onDone={() => setDay(pickerDay)}>
-          <Picker selectedValue={pickerDay} onValueChange={setPickerDay}>
+          <Picker
+            testID="ChildEditor__DayPicker"
+            selectedValue={pickerDay}
+            onValueChange={setPickerDay}>
             {daysOfWeekPickerItems()}
           </Picker>
         </ActionSheet>
@@ -207,8 +218,11 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
       <View style={styles.field}>
         <Text style={styles.labelText}>Pocket money per week</Text>
         <View style={styles.moneyContainer}>
-          <Text style={styles.inlineLabelText}>{currency}</Text>
+          <Text testID="ChildEditor__Currency" style={styles.inlineLabelText}>
+            {currency}
+          </Text>
           <TextInput
+            testID="ChildEditor__Amount__Major"
             style={styles.input}
             value={String(pounds)}
             keyboardType="numeric"
@@ -217,6 +231,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
           />
           <Text style={styles.inlineLabelText}>.</Text>
           <TextInput
+            testID="ChildEditor__Amount__Minor"
             style={styles.input}
             value={String(pence)}
             keyboardType="numeric"
@@ -225,6 +240,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
           />
         </View>
         <Button
+          testID="ChildEditor__ChangeCurrencyButton"
           title="change currency"
           onPress={() => setShowCurrencyPicker(true)}
         />
@@ -233,6 +249,7 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
           setShow={setShowCurrencyPicker}
           onDone={() => setCurrency(pickerCurrency)}>
           <Picker
+            testID="ChildEditor__CurrencyPicker"
             selectedValue={pickerCurrency}
             onValueChange={setPickerCurrency}>
             {currenciesPickerItems()}
@@ -242,25 +259,35 @@ export const ChildEditor: React.FC<ChildEditorProps> = ({
 
       <View style={styles.valueContainer}>
         <Text style={styles.labelText}>Begin on:</Text>
-        <Text style={styles.value}>
+        <Text testID="ChildEditor__BeginDate" style={styles.value}>
           {format(beginningOfTime, 'do MMM yyyy')}
         </Text>
-        <Button title="Change" onPress={() => setShowDatePicker(true)} />
-        <DatePicker
-          modal
-          mode="date"
-          open={showDatePicker}
-          date={beginningOfTime}
-          onConfirm={date => {
-            setBeginningOfTime(date);
-            setShowDatePicker(false);
-          }}
-          onCancel={() => {
-            setShowDatePicker(false);
-          }}
+        <Button
+          testID="ChildEditor__ChangeBeginDateButton"
+          title="Change"
+          onPress={() => setShowDatePicker(true)}
         />
+
+        <ActionSheet
+          show={showDatePicker}
+          setShow={setShowDatePicker}
+          onDone={() => setBeginningOfTime(pickerDate)}>
+          {showDatePicker && (
+            <DateTimePicker
+              testID="ChildEditor__DatePicker"
+              value={pickerDate}
+              display="spinner"
+              mode="date"
+              onChange={(e, selectedDate) => setPickerDate(selectedDate!)}
+            />
+          )}
+        </ActionSheet>
       </View>
-      <PrimaryActionButton onPress={onSaveClick} text="Save" />
+      <PrimaryActionButton
+        testID="ChildEditor__SaveButton"
+        onPress={onSaveClick}
+        text="Save"
+      />
     </View>
   );
 };

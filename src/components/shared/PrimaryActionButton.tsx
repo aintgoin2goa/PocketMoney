@@ -29,17 +29,19 @@ const getStyles = (isDarkMode: boolean) => {
 
 export type PayButtonProps = {
   text: string;
+  testID?: string;
   onPress: () => void;
 };
 
 export const PrimaryActionButton: React.FC<PayButtonProps> = ({
   onPress,
+  testID,
   text,
 }) => {
   const styles = getStyles(useColorScheme() === 'dark');
   return (
     <View style={styles.container}>
-      <Pressable style={styles.button} onPress={onPress}>
+      <Pressable testID={testID} style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>{text}</Text>
       </Pressable>
     </View>

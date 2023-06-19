@@ -87,7 +87,9 @@ export const ChildSwitcher: React.FC<ChildSwitcherProps> = ({
     <View style={styles.container}>
       {rows}
       <View style={styles.row}>
-        <Pressable onPress={() => navigation.navigate('Add Child')}>
+        <Pressable
+          testID="ChildSwitcher__AddChildButton"
+          onPress={() => navigation.navigate('Add Child')}>
           <Text style={styles.text}>ADD CHILD</Text>
         </Pressable>
       </View>

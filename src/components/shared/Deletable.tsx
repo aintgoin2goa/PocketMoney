@@ -30,6 +30,7 @@ const getStyles = (isDarkMode: boolean) => {
 };
 
 export type DeletableProps = {
+  testID?: string;
   children: React.ReactNode;
   onDelete: () => void;
 };
@@ -49,7 +50,11 @@ const renderRightActions =
     );
   };
 
-export const Deletable: React.FC<DeletableProps> = ({children, onDelete}) => {
+export const Deletable: React.FC<DeletableProps> = ({
+  children,
+  onDelete,
+  testID,
+}) => {
   const ref = useRef<Swipeable>(null);
   const styles = getStyles(useColorScheme() === 'dark');
   const onDeletePress = () => {
@@ -66,6 +71,7 @@ export const Deletable: React.FC<DeletableProps> = ({children, onDelete}) => {
   };
   return (
     <Swipeable
+      testID={testID}
       ref={ref}
       renderRightActions={renderRightActions(styles, onDeletePress)}>
       {children}

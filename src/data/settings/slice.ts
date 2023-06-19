@@ -20,8 +20,13 @@ const setOfflineMode = (state: Settings, action: PayloadAction<boolean>) => {
   return state;
 };
 
+const setCurrentPayment = (state: Settings, action: PayloadAction<number>) => {
+  state.currentPayment = action.payload;
+  return state;
+};
+
 export const settingsSlice = createSlice({
   name: 'settings',
   initialState: initialState.settings,
-  reducers: {switchChild, setBackupKey, setOfflineMode},
+  reducers: {switchChild, setBackupKey, setOfflineMode, setCurrentPayment},
 });

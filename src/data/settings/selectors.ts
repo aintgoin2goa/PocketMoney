@@ -11,3 +11,7 @@ export const getBackupKey = (state: State) => {
 export const getOfflineMode = (state: State) => {
   return state?.settings?.offlineMode ?? false;
 };
+
+export const getCurrentPayment = (state: State) => {
+  return state?.settings?.currentPayment ?? 0;
+};

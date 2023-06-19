@@ -49,7 +49,9 @@ export const Dates: React.FC = () => {
       </View>
       <View style={styles.innerContainer}>
         <Text style={styles.title}>Last paid </Text>
-        <Text style={styles.amount}>{lastPaid}</Text>
+        <Text testID="HomeScreen__LastPaidDate" style={styles.amount}>
+          {lastPaid}
+        </Text>
       </View>
     </View>
   );

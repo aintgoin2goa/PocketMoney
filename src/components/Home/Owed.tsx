@@ -37,8 +37,11 @@ export const Owed: React.FC = () => {
   const text = owed >= 0 ? 'You owe' : 'You have overpaid by';
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>{text}</Text>
+      <Text testID="HomeScreen__OwedTitle" style={styles.label}>
+        {text}
+      </Text>
       <Text
+        testID="HomeScreen__AmountOwed"
         adjustsFontSizeToFit={true}
         allowFontScaling={true}
         style={styles.amount}>
