@@ -61,7 +61,7 @@ jobs:
         run: npx detox build --configuration ios.sim.release
 
       - name: Detox test
-        run: npx detox test --configuration ios.sim.release --cleanup --headless --record-logs all --take-screenshots all --record-videos failing
+        run: npx detox test add-child --configuration ios.sim.release --cleanup --headless --record-logs all --take-screenshots all --record-videos failing
 
       - name: Upload artifacts
         if: success() || failure()
