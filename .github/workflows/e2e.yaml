@@ -7,6 +7,7 @@ on:
 
 jobs:
   tests:
+    name: Detox
     runs-on: macos-latest
     steps:
       - name: Checkout repository
@@ -16,6 +17,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+          cache: 'npm'
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
 
       - run: npm ci
 
@@ -26,12 +34,6 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
-
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: '3.0'
-          bundler-cache: true
 
       - name: Cache CocoaPods
         id: cache-cocoapods
@@ -56,13 +58,14 @@ jobs:
             ${{ runner.os }}-detox-build
 
       - name: Detox build
+        if: steps.cache-detox-build.outputs.cache-hit != 'true'
         run: npx detox build --configuration ios.sim.release
 
       - name: Detox test
-        run: npx detox test --configuration ios.sim.release --cleanup --headless --record-logs all
+        run: npx detox test --configuration ios.sim.release --cleanup --headless --record-logs all --take-screenshots all --record-videos failing
 
       - name: Upload artifacts
-        if: failure()
+        if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: detox-artifacts
